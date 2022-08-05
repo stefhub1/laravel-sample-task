@@ -66,7 +66,9 @@ class ColumnController extends Controller
 			'cards' => function ($q) {
 				$q->orderBy('sort_number');
 			}
-		])->get();
+		])
+			->orderBy('id')
+			->get();
 
 		return new ColumnCollection($columns);
 	}
