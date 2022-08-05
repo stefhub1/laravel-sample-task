@@ -42,7 +42,7 @@
     </modal>
 
     <div class="board__float">
-      <button type="button" class="column__button column__button--green">
+      <button type="button" class="column__button column__button--green" @click="exportDB">
         Export DB
       </button>
     </div>
@@ -355,6 +355,10 @@ export default {
       this.cardModalShow = false;
 
       this.$modal.hide('card-modal');
+    },
+
+    exportDB() {
+      window.open('/export-db', '_blank');
     }
   },
   watch: {

@@ -26,4 +26,4 @@ Route::resource('columns', ColumnController::class)
 Route::resource('cards', CardController::class)
 	->except(['index', 'create', 'edit', 'show', 'destroy']);
 
-Route::get('/export-db', [IndexController::class, 'index']);
+Route::get('/export-db', [IndexController::class, 'exportDatabase']);
