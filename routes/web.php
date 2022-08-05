@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\ColumnController;
+use App\Http\Controllers\IndexController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,11 +16,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-	return view('welcome');
-});
+Route::get('/', [IndexController::class, 'index']);
 
+// Columns
 Route::resource('columns', ColumnController::class)
-	->except(['create', 'edit', 'show', 'update']);
-Route::resource('cards', CardController::class)
 	->except(['create', 'edit', 'show']);
+
+// Cards
+Route::resource('cards', CardController::class)
+	->except(['index', 'create', 'edit', 'show', 'destroy']);
+
+Route::get('/export-db', [IndexController::class, 'index']);

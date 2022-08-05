@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\ColumnCollection;
 use App\Models\Column;
+use App\Traits\ColumnData;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ColumnController extends Controller
 {
+	use ColumnData;
+
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -44,6 +46,29 @@ class ColumnController extends Controller
 	}
 
 	/**
+	 * Update card sort numbers
+	 *
+	 * @param Request $request
+	 * @param Column $column
+	 * @return JsonResponse
+	 */
+	public function update(Request $request, Column $column)
+	{
+		$cards = $request->input('cards');
+		if ($cards) {
+			foreach ($cards as $card) {
+				$columnCard = $column->cards()->find($card['id']);
+				$columnCard->sort_number = $card['sort_number'];
+				$columnCard->save();
+			}
+		}
+
+		return response()->json([
+			'result' => 'success'
+		]);
+	}
+
+	/**
 	 * Remove the specified resource from storage.
 	 *
 	 * @param Column $column
@@ -51,25 +76,15 @@ class ColumnController extends Controller
 	 */
 	public function destroy(Column $column)
 	{
-		$column->cards()->delete();
+		$column->cards()->update([
+			'deleted_at' => now()
+		]);
 
-		$column->delete();
+		$column->deleted_at = now();
+		$column->save();
 
 		return response()->json([
 			'result' => 'success'
 		]);
-	}
-
-	private function getColumns()
-	{
-		$columns = Column::with([
-			'cards' => function ($q) {
-				$q->orderBy('sort_number');
-			}
-		])
-			->orderBy('id')
-			->get();
-
-		return new ColumnCollection($columns);
 	}
 }

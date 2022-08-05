@@ -3,84 +3,56 @@
 namespace App\Http\Controllers;
 
 use App\Models\Card;
+use App\Traits\ColumnData;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class CardController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return void
-	 */
-    public function index()
-    {
-        //
-    }
+	use ColumnData;
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return void
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @param Request $request
+	 * @return JsonResponse
 	 */
-    public function create()
-    {
-        //
-    }
+	public function store(Request $request)
+	{
+		$request->validate([
+			'title'       => ['required'],
+			'description' => ['required']
+		]);
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return void
-	 */
-    public function store(Request $request)
-    {
-        //
-    }
+		$card = new Card();
+		$card->fill($request->all());
+		$card->save();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param Card $card
-     * @return void
-	 */
-    public function show(Card $card)
-    {
-        //
-    }
+		return response()->json([
+			'result'  => 'success',
+			'columns' => $this->getColumns()
+		]);
+	}
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param Card $card
-     * @return void
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param Request $request
+	 * @param Card $card
+	 * @return JsonResponse
 	 */
-    public function edit(Card $card)
-    {
-        //
-    }
+	public function update(Request $request, Card $card)
+	{
+		$request->validate([
+			'title'       => ['required'],
+			'description' => ['required']
+		]);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param Card $card
-     * @return void
-	 */
-    public function update(Request $request, Card $card)
-    {
-        //
-    }
+		$card->fill($request->all());
+		$card->save();
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param Card $card
-     * @return void
-	 */
-    public function destroy(Card $card)
-    {
-        //
-    }
+		return response()->json([
+			'result' => 'success'
+		]);
+	}
 }
