@@ -1,4 +1,4 @@
-import {createVuePlugin as Vue2Plugin} from 'vite-plugin-vue2';
+import {createVuePlugin} from 'vite-plugin-vue2';
 
 const {resolve} = require('path');
 const Dotenv = require('dotenv');
@@ -9,19 +9,27 @@ const ASSET_URL = process.env.ASSET_URL || '';
 
 export default {
   plugins: [
-    Vue2Plugin(),
+    createVuePlugin(),
   ],
   
   root: 'resources',
   base: `${ASSET_URL}/dist/`,
   
   build: {
-    outDir: resolve(__dirname, 'public/dist'),
-    emptyOutDir: true,
+    sourcemap: true,
+    // Generate source maps
     manifest: true,
+    
+    // Generate manifest where PHP can find the entry point from
+    emptyOutDir: true,
+    
+    // Vite will clear the entire folder here, thus let's place everything in build folder
+    outDir: resolve(__dirname, 'public/dist'),
     target: 'es2018',
     rollupOptions: {
-      input: '/js/app.js'
+      input: [
+        'resources/js/app.js'
+      ]
     }
   },
   
@@ -37,9 +45,6 @@ export default {
   },
   
   optimizeDeps: {
-    include: [
-      'vue',
-      'axios'
-    ]
+    include: []
   }
 }
