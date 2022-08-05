@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CardController;
+use App\Http\Controllers\ColumnController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +16,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+	return view('welcome');
 });
+
+Route::resource('columns', ColumnController::class)
+	->except(['create', 'edit', 'show', 'update']);
+Route::resource('cards', CardController::class)
+	->except(['create', 'edit', 'show']);

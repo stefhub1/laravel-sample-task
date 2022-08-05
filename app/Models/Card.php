@@ -10,7 +10,7 @@ class Card extends Model
 {
 	use HasFactory;
 
-	protected $fillable = ['column_id', 'card_title', 'card_description', 'order_number'];
+	protected $fillable = ['column_id', 'title', 'description', 'sort_number'];
 
 	protected $casts = [
 		'column_id' => 'int'

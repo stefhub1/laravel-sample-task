@@ -2,85 +2,72 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ColumnCollection;
 use App\Models\Column;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class ColumnController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return void
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return JsonResponse
 	 */
-    public function index()
-    {
-        //
-    }
+	public function index()
+	{
+		return response()->json([
+			'result' => $this->getColumns()
+		]);
+	}
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return void
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @param Request $request
+	 * @return JsonResponse
 	 */
-    public function create()
-    {
-        //
-    }
+	public function store(Request $request)
+	{
+		$request->validate([
+			'title' => 'required'
+		]);
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return void
-	 */
-    public function store(Request $request)
-    {
-        //
-    }
+		$column = new Column();
+		$column->fill($request->all());
+		$column->save();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param Column $column
-     * @return void
-	 */
-    public function show(Column $column)
-    {
-        //
-    }
+		return response()->json([
+			'result'  => 'success',
+			'columns' => $this->getColumns()
+		]);
+	}
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param Column $column
-     * @return void
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param Column $column
+	 * @return JsonResponse
 	 */
-    public function edit(Column $column)
-    {
-        //
-    }
+	public function destroy(Column $column)
+	{
+		$column->cards()->delete();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param Column $column
-     * @return void
-	 */
-    public function update(Request $request, Column $column)
-    {
-        //
-    }
+		$column->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param Column $column
-     * @return void
-	 */
-    public function destroy(Column $column)
-    {
-        //
-    }
+		return response()->json([
+			'result' => 'success'
+		]);
+	}
+
+	private function getColumns()
+	{
+		$columns = Column::with([
+			'cards' => function ($q) {
+				$q->orderBy('sort_number');
+			}
+		])->get();
+
+		return new ColumnCollection($columns);
+	}
 }

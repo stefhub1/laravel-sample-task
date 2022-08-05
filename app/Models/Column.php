@@ -10,7 +10,7 @@ class Column extends Model
 {
 	use HasFactory;
 
-	protected $fillable = ['column_title'];
+	protected $fillable = ['title'];
 
 	/**
 	 * Card Model relationship
