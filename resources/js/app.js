@@ -4,6 +4,7 @@ import VModal from 'vue-js-modal'
 import './bootstrap';
 import App from './App.vue';
 import routes from "./routes";
+import '../scss/app.scss';
 
 Vue.config.productionTip = false;
 
