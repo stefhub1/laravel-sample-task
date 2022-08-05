@@ -24,8 +24,7 @@
       <div class="column__content" v-if="addingColumn">
         <div class="form">
           <div class="form__group">
-            <label class="form__label">Column Title</label>
-            <input class="form__input" v-model="columnTitle"/>
+            <input type="text" placeholder="Column Title" class="form__input" v-model="columnTitle"/>
           </div>
 
           <div class="form__control">
