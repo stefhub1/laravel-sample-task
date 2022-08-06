@@ -24,7 +24,7 @@ class AccessToken
 			abort(401);
 		}
 
-		if (Hash::check(config('auth.access_email'), $request->input('access_token'))) {
+		if (!Hash::check(config('auth.access_email'), $request->input('access_token'))) {
 			abort(401);
 		}
 
